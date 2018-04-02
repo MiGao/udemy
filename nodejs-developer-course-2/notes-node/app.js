@@ -14,13 +14,30 @@ console.log('Command:', command);
 console.log('yargs', argv);
 
 if (command === 'add') {
-    notes.addNote(argv.title, argv.body);
+    const note = notes.addNote(argv.title, argv.body);
+    const message = note ?
+        `Saved note: ${JSON.stringify(note)}` :
+        `${argv.title} already exists, add aborted`;
+    console.log(message);
 } else if (command === 'list') {
-    notes.getAll();
+    const allNotes = notes.getAll();
+    console.log(allNotes);
 } else if (command === 'read') {
-    notes.getNote(argv.title);
+    const note = notes.getNote(argv.title);
+    printMessage(note, note, `${argv.title} not found`);
 } else if (command === 'remove') {
-    notes.remove(argv.title);
+    const didRemove = notes.remove(argv.title);
+    const message = didRemove ?
+        `"${argv.title}" removed` :
+        `"${argv.title}" not found`;
+    console.log(message);
 } else {
     console.log('Unknown command:', command);
+}
+
+const printMessage = function(condition, trueMessage, falseMessage) {
+    const message = condition ?
+        trueMessage :
+        falseMessage;
+    console.log(message);
 }
